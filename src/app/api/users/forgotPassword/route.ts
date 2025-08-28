@@ -7,10 +7,11 @@ import { sendEmail } from "@/helpers/mailer";
 
 connect()
 
-export async function POST(request: NextRequest){
+export async function POST(req: NextRequest){
 try {
-    const reqBody = await request.json()
-    const {email} = reqBody;
+    const reqBody: { email: string } = await req.json();
+    const { email } = reqBody;
+
     console.log(reqBody);
 
     //check if user exists
@@ -24,8 +25,9 @@ try {
 
     return NextResponse.json({success : "User exists!!"}, {status: 200})
 
-} catch (error:any) {
-    return NextResponse.json({error: error.message}, {status: 500})
+} catch (error: unknown) {
+    const e = error as Error;
+    return NextResponse.json({ error: e.message }, { status: 500 });
 }
 
 }
