@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
 }
 
  
-// See "Matching Paths" below to learn more
+// See "Matching Paths" below 
 export const config = {
   matcher: [  
     '/',
