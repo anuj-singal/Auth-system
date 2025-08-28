@@ -71,7 +71,7 @@ export default function ProfilePage() {
               ) : (
                 <Link
                   href={`/profile/${data}`}
-                  className="px-3 py-1 bg-green-500 rounded-lg text-white hover:bg-green-600"
+                  className="px-3 py-1 bg-green-400 rounded-lg text-white hover:bg-green-600"
                 >
                   ID: {data}
                 </Link>
