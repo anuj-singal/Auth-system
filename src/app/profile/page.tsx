@@ -11,26 +11,29 @@ export default function ProfilePage() {
   const [data, setData] = useState("nothing");
 
   const logout = async () => {
-    try {
-      await axios.get("/api/users/logout");
-      toast.success("Logout successful");
-      router.push("/login");
-    } catch (error: any) {
-      console.log(error.message);
-      toast.error(error.message);
-    }
-  };
+  try {
+    await axios.get("/api/users/logout");
+    toast.success("Logout successful");
+    router.push("/login");
+  } catch (error: unknown) {
+    const e = error as Error;
+    console.log(e.message);
+    toast.error(e.message);
+  }
+};
 
-  const getUserDetails = async () => {
-    try {
-      const res = await axios.get("/api/users/me");
-      console.log(res.data);
-      setData(res.data.data._id);
-    } catch (error: any) {
-      console.log(error.message);
-      toast.error("Failed to fetch user details");
-    }
-  };
+const getUserDetails = async () => {
+  try {
+    const res = await axios.get("/api/users/me");
+    console.log(res.data);
+    setData(res.data.data._id);
+  } catch (error: unknown) {
+    const e = error as Error;
+    console.log(e.message);
+    toast.error("Failed to fetch user details");
+  }
+};
+
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">

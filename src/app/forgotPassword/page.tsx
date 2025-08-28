@@ -13,18 +13,19 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const onForgetPassword = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/users/forgotPassword", user);
-      toast.success("Password reset link sent to your email!");
-      router.push("/login");
-    } catch (error: any) {
-      console.log("Error:", error.message);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const response = await axios.post("/api/users/forgotPassword", user);
+    toast.success("Password reset link sent to your email!");
+    router.push("/login");
+  } catch (error: unknown) {
+    const e = error as { message: string }; // type assertion
+    console.log("Error:", e.message);
+    toast.error(e.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     setButtonDisabled(user.email.length < 1);

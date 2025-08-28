@@ -18,4 +18,5 @@ export async function GET(request: NextRequest) {
     const e = error as Error;
     return NextResponse.json({ error: e.message }, { status: 400 });
   }
+
 }

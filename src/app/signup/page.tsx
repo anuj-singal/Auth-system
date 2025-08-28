@@ -23,10 +23,11 @@ export default function SignupPage() {
       const response = await axios.post("/api/users/signup", user);
       console.log("Signup success", response.data);
       router.push("/login");
-    } catch (error: any) {
-      console.log("Signup failed", error.message);
-      toast.error(error.message);
-    } finally {
+    }catch (error: unknown) {
+      const e = error as Error; // type assertion
+      console.log("Signup failed", e.message);
+      toast.error(e.message);
+    }finally {
       setLoading(false);
     }
   };
@@ -67,7 +68,7 @@ export default function SignupPage() {
         {/* Right side: Form */}
         <div className="p-10 flex flex-col items-center">
           <h1 className="text-3xl font-bold text-[#12343b] mb-6">
-            {loading ? "Processing..." : "Create Account"}
+            {loading ? "Processing..." : "Create Account ✨"}
           </h1>
 
           <input

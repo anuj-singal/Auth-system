@@ -26,24 +26,26 @@ export default function ResetPassword() {
   }, [newPassword]);
 
   const onResetPassword = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await axios.post("/api/users/resetPassword", {
-        token,
-        password: newPassword,
-      });
+    const response = await axios.post("/api/users/resetPassword", {
+      token,
+      password: newPassword,
+    });
 
-      console.log("Reset Password", response.data);
-      toast.success("Password reset successfully!");
-      router.push("/login");
-    } catch (error: any) {
-      console.log("Password reset failed", error.response?.data || error.message);
-      toast.error(error.response?.data?.error || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log("Reset Password", response.data);
+    toast.success("Password reset successfully!");
+    router.push("/login");
+  } catch (error: unknown) {
+    const e = error as { response?: { data?: { error?: string } } };
+    console.log("Password reset failed", e.response?.data || (e as Error).message);
+    toast.error(e.response?.data?.error || (e as Error).message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">
