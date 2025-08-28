@@ -1,8 +1,8 @@
 import {connect} from "@/dbConfig/dbConfig";
 import User from "@/models/userModels.js";
 import { NextRequest, NextResponse } from "next/server";
-import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
+// import bcryptjs from "bcryptjs";
+// import jwt from "jsonwebtoken";
 import { sendEmail } from "@/helpers/mailer";
 
 connect()
