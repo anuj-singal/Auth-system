@@ -1,33 +1,27 @@
-type UserProfileProps = {
-  params: {
-    id: string;
-  };
-};
+// src/app/profile/[id]/page.tsx
+interface UserProfileProps {
+  params: { id: string };
+}
 
 export default function UserProfile({ params }: UserProfileProps) {
-  const userId = params?.id ?? "U"; // fallback if undefined
+  const { id } = params;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 text-center">
-        {/* Profile Header */}
         <div className="flex flex-col items-center mb-6">
           <div className="w-20 h-20 rounded-full bg-orange-500 flex items-center justify-center text-white text-2xl font-bold">
-            {userId.charAt(0).toUpperCase()}
+            {id.charAt(0).toUpperCase()}
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mt-3">User Profile</h1>
           <p className="text-gray-600 text-sm">Detailed information about this user</p>
         </div>
 
-        {/* Profile Info */}
         <div className="bg-gray-100 rounded-lg p-4 text-left">
           <p className="text-sm text-gray-600 mb-1">User ID</p>
-          <p className="text-lg font-mono font-medium text-gray-800 break-words">
-            {userId}
-          </p>
+          <p className="text-lg font-mono font-medium text-gray-800 break-words">{id}</p>
         </div>
 
-        {/* Actions */}
         <div className="mt-6 flex flex-col gap-3">
           <button className="w-full py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition">
             Message User

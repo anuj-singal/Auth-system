@@ -1,6 +1,8 @@
 "use client";
+
+import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -8,36 +10,27 @@ import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [user, setUser] = React.useState({
-    email: "",
-    password: "",
-  });
-  const [buttonDisabled, setButtonDisabled] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [buttonDisabled, setButtonDisabled] = useState(true); // start true
+  const [loading, setLoading] = useState(false);
 
   const onLogin = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.post("/api/users/login", user);
-    console.log("Login success", response.data);
-    toast.success("Login success");
-    router.push("/profile");
-  } catch (error: unknown) {
-    const e = error as { message: string }; // type assertion
-    console.log("Login failed", e.message);
-    toast.error(e.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/login", user);
+      console.log("Login success", response.data);
+      toast.success("Login success");
+      router.push("/profile");
+    } catch (error: unknown) {
+      const e = error as { response?: { data?: { error?: string } }; message?: string };
+      toast.error(e.response?.data?.error || e.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (user.email.length > 0 && user.password.length > 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
+    setButtonDisabled(!(user.email.length > 0 && user.password.length > 0));
   }, [user]);
 
   return (
@@ -61,9 +54,11 @@ export default function LoginPage() {
       >
         {/* Left Side – Illustration */}
         <div className="hidden md:flex w-1/2 items-center justify-center bg-[#E9C46A]/20 p-6">
-          <img
+          <Image
             src="/images/login-bro.svg"
             alt="Login illustration"
+            width={400}
+            height={400}
             className="w-3/4 h-auto drop-shadow-lg"
           />
         </div>
@@ -77,10 +72,7 @@ export default function LoginPage() {
             Welcome back! Please enter your credentials to continue.
           </p>
 
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-[#457B9D] mb-1"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-[#457B9D] mb-1">
             Email
           </label>
           <input
@@ -92,10 +84,7 @@ export default function LoginPage() {
             className="w-full p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[#2A9D8F] text-black"
           />
 
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-[#457B9D] mb-1"
-          >
+          <label htmlFor="password" className="block text-sm font-medium text-[#457B9D] mb-1">
             Password
           </label>
           <input
@@ -107,11 +96,7 @@ export default function LoginPage() {
             className="w-full p-2 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-[#2A9D8F] text-black"
           />
 
-          {/* Forget password link */}
-          <Link
-            href="/forgotPassword"
-            className="text-sm text-[#F4A261] hover:underline block mb-4"
-          >
+          <Link href="/forgotPassword" className="text-sm text-[#F4A261] hover:underline block mb-4">
             Forgot Password?
           </Link>
 
@@ -143,15 +128,9 @@ export default function LoginPage() {
           animation: gradientMove 15s ease infinite;
         }
         @keyframes gradientMove {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .orb {
           position: absolute;
@@ -162,12 +141,8 @@ export default function LoginPage() {
           animation: float 12s ease-in-out infinite alternate;
         }
         @keyframes float {
-          from {
-            transform: translateY(0px);
-          }
-          to {
-            transform: translateY(-60px);
-          }
+          from { transform: translateY(0px); }
+          to { transform: translateY(-60px); }
         }
       `}</style>
     </div>

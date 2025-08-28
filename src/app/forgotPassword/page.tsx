@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -13,19 +14,19 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const onForgetPassword = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.post("/api/users/forgotPassword", user);
-    toast.success("Password reset link sent to your email!");
-    router.push("/login");
-  } catch (error: unknown) {
-    const e = error as { message: string }; // type assertion
-    console.log("Error:", e.message);
-    toast.error(e.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setLoading(true);
+      await axios.post("/api/users/forgotPassword", user);
+      toast.success("Password reset link sent to your email!");
+      router.push("/login");
+    } catch (error: unknown) {
+      const e = error as { response?: { data?: { error?: string } }; message?: string };
+      toast.error(e.response?.data?.error || e.message || "Failed to send reset link");
+      console.log("Error:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     setButtonDisabled(user.email.length < 1);
@@ -52,11 +53,13 @@ export default function ForgotPassword() {
       >
         {/* Left Side – Illustration */}
         <div className="hidden md:flex w-1/2 items-center justify-center bg-[#E9C46A]/20 p-6">
-          <img
+          <Image
             src="/images/forgotpass.svg"
-            alt="Login illustration"
+            alt="Forgot password illustration"
+            width={400}
+            height={400}
             className="w-3/4 h-auto drop-shadow-lg"
-            />
+          />
         </div>
 
         {/* Right Side – Form */}
@@ -65,14 +68,10 @@ export default function ForgotPassword() {
             {loading ? "Processing..." : "Forgot Password"}
           </h1>
           <p className="text-sm text-gray-600 mb-6">
-            Don’t worry! Enter your registered email and we’ll send you a reset
-            link.
+            Don’t worry! Enter your registered email and we’ll send you a reset link.
           </p>
 
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-[#457B9D] mb-1"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-[#457B9D] mb-1">
             Email
           </label>
           <input
@@ -105,15 +104,9 @@ export default function ForgotPassword() {
           animation: gradientMove 15s ease infinite;
         }
         @keyframes gradientMove {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .orb {
           position: absolute;
@@ -124,12 +117,8 @@ export default function ForgotPassword() {
           animation: float 12s ease-in-out infinite alternate;
         }
         @keyframes float {
-          from {
-            transform: translateY(0px);
-          }
-          to {
-            transform: translateY(-60px);
-          }
+          from { transform: translateY(0px); }
+          to { transform: translateY(-60px); }
         }
       `}</style>
     </div>
