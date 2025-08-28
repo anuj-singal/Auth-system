@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function ResetPassword() {
 
   // Enable/disable button based on password input
   useEffect(() => {
-    setButtonDisabled(newPassword.length < 1); 
+    setButtonDisabled(newPassword.length < 1);
   }, [newPassword]);
 
   const onResetPassword = async () => {
@@ -35,7 +36,7 @@ export default function ResetPassword() {
 
       console.log("Reset Password", response.data);
       toast.success("Password reset successfully!");
-      router.push("/");
+      router.push("/login");
     } catch (error: any) {
       console.log("Password reset failed", error.response?.data || error.message);
       toast.error(error.response?.data?.error || "Something went wrong");
@@ -45,25 +46,59 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-2xl mb-4">{loading ? "Processing..." : "Reset Password"}</h1>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">
+      {/* Floating orbs for background effect */}
+      <div className="absolute -top-10 -left-10 h-72 w-72 rounded-full bg-white opacity-20 blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#6EB8E1] opacity-30 blur-3xl animate-ping"></div>
 
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-        id="password"
-        type="password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        placeholder="Enter new password"
-      />
-
-      <button
-        onClick={onResetPassword}
-        disabled={buttonDisabled || loading}
-        className={`p-2 border rounded-lg ${buttonDisabled ? "bg-gray-300" : "bg-blue-500 text-white"} focus:outline-none`}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 w-full max-w-md p-8 bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl"
       >
-        {loading ? "Reseting..." : "Reset Password"}
-      </button>
+
+        <div className="hidden md:block">
+          <img
+            src="/images/resetpass.svg"
+            alt="signup"
+            className="h-full w-full object-cover"
+          />
+        </div>
+
+
+        <h1 className="text-3xl font-bold text-center text-[#12343b] mb-6">
+          {loading ? "Processing..." : "Reset Password"}
+        </h1>
+
+        <input
+          className="w-full p-3 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EB8E1] text-black"
+          id="password"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="Enter new password"
+        />
+
+        <button
+          onClick={onResetPassword}
+          disabled={buttonDisabled || loading}
+          className={`w-full py-3 px-6 rounded-lg transition-colors duration-300 ${
+            buttonDisabled || loading
+              ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+              : "bg-[#6EB8E1] hover:bg-[#5aa6cc] text-white"
+          }`}
+        >
+          {loading ? "Reseting..." : "Reset Password"}
+        </button>
+
+        <p className="mt-4 text-center text-gray-700">
+          Remembered your password?{" "}
+          <Link href="/login" className="text-[#6EB8E1] hover:underline">
+            Login
+          </Link>
+        </p>
+      </motion.div>
     </div>
   );
 }
