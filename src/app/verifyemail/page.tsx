@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 export default function VerifyEmailPage() {
@@ -10,16 +11,17 @@ export default function VerifyEmailPage() {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState(false);
 
-  const verifyUserEmail = async () => {
-  try {
-    await axios.post("/api/users/verifyemail", { token });
-    setVerified(true);
-  } catch (error: unknown) {
-    setError(true);
-    const e = error as { response?: { data?: unknown } };
-    console.log(e.response?.data);
-  }
-  };
+  const verifyUserEmail = useCallback(async () => {
+    if (!token) return;
+    try {
+      await axios.post("/api/users/verifyemail", { token });
+      setVerified(true);
+    } catch (error: unknown) {
+      setError(true);
+      const e = error as { response?: { data?: unknown } };
+      console.log(e.response?.data);
+    }
+  }, [token]);
 
   useEffect(() => {
     const urlToken = new URLSearchParams(window.location.search).get("token");
@@ -27,10 +29,8 @@ export default function VerifyEmailPage() {
   }, []);
 
   useEffect(() => {
-    if (token.length > 0) {
-      verifyUserEmail();
-    }
-  }, [token]);
+    verifyUserEmail();
+  }, [verifyUserEmail]);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">
@@ -45,23 +45,22 @@ export default function VerifyEmailPage() {
         className="relative z-10 w-full max-w-md p-8 bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl text-center"
       >
         <div className="hidden md:block">
-          <img
+          <Image
             src="/images/verify.svg"
-            alt="signup"
-            className="h-full w-full object-cover"
+            alt="Email Verification"
+            width={400} // adjust width
+            height={400} // adjust height
+            className="object-cover"
           />
         </div>
 
-        
         <h1 className="text-3xl font-bold text-[#12343b] mb-6">
           Verify Your Email 📧
         </h1>
 
-        {/* Show token just for debugging (optional) */}
+        {/* Optional token display */}
         {token && (
-          <p className="text-xs text-gray-600 mb-4 break-all">
-            Token: {token}
-          </p>
+          <p className="text-xs text-gray-600 mb-4 break-all">Token: {token}</p>
         )}
 
         {verified && (
@@ -92,9 +91,7 @@ export default function VerifyEmailPage() {
           </div>
         )}
 
-        {!verified && !error && (
-          <p className="text-gray-700">Verifying your email...</p>
-        )}
+        {!verified && !error && <p className="text-gray-700">Verifying your email...</p>}
       </motion.div>
     </div>
   );

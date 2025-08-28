@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -26,30 +27,34 @@ export default function ResetPassword() {
   }, [newPassword]);
 
   const onResetPassword = async () => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const response = await axios.post("/api/users/resetPassword", {
-      token,
-      password: newPassword,
-    });
+      const response = await axios.post("/api/users/resetPassword", {
+        token,
+        password: newPassword,
+      });
 
-    console.log("Reset Password", response.data);
-    toast.success("Password reset successfully!");
-    router.push("/login");
-  } catch (error: unknown) {
-    const e = error as { response?: { data?: { error?: string } } };
-    console.log("Password reset failed", e.response?.data || (e as Error).message);
-    toast.error(e.response?.data?.error || (e as Error).message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
-
+      console.log("Reset Password", response.data);
+      toast.success("Password reset successfully!");
+      router.push("/login");
+    } catch (error: unknown) {
+      const e = error as { response?: { data?: { error?: string } } };
+      console.log(
+        "Password reset failed",
+        e.response?.data || (e as Error).message
+      );
+      toast.error(
+        e.response?.data?.error || (e as Error).message || "Something went wrong"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">
-      {/* Floating orbs for background effect */}
+      {/* Floating orbs */}
       <div className="absolute -top-10 -left-10 h-72 w-72 rounded-full bg-white opacity-20 blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#6EB8E1] opacity-30 blur-3xl animate-ping"></div>
 
@@ -59,15 +64,15 @@ export default function ResetPassword() {
         transition={{ duration: 0.8 }}
         className="relative z-10 w-full max-w-md p-8 bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl"
       >
-
-        <div className="hidden md:block">
-          <img
+        <div className="hidden md:block mb-4">
+          <Image
             src="/images/resetpass.svg"
-            alt="signup"
-            className="h-full w-full object-cover"
+            alt="Reset Password Illustration"
+            width={400} // adjust width
+            height={300} // adjust height
+            className="object-cover"
           />
         </div>
-
 
         <h1 className="text-3xl font-bold text-center text-[#12343b] mb-6">
           {loading ? "Processing..." : "Reset Password"}

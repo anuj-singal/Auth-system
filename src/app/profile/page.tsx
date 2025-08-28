@@ -1,5 +1,7 @@
 "use client";
+
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -11,29 +13,28 @@ export default function ProfilePage() {
   const [data, setData] = useState("nothing");
 
   const logout = async () => {
-  try {
-    await axios.get("/api/users/logout");
-    toast.success("Logout successful");
-    router.push("/login");
-  } catch (error: unknown) {
-    const e = error as Error;
-    console.log(e.message);
-    toast.error(e.message);
-  }
-};
+    try {
+      await axios.get("/api/users/logout");
+      toast.success("Logout successful");
+      router.push("/login");
+    } catch (error: unknown) {
+      const e = error as Error;
+      console.log(e.message);
+      toast.error(e.message);
+    }
+  };
 
-const getUserDetails = async () => {
-  try {
-    const res = await axios.get("/api/users/me");
-    console.log(res.data);
-    setData(res.data.data._id);
-  } catch (error: unknown) {
-    const e = error as Error;
-    console.log(e.message);
-    toast.error("Failed to fetch user details");
-  }
-};
-
+  const getUserDetails = async () => {
+    try {
+      const res = await axios.get("/api/users/me");
+      console.log(res.data);
+      setData(res.data.data._id);
+    } catch (error: unknown) {
+      const e = error as Error;
+      console.log(e.message);
+      toast.error("Failed to fetch user details");
+    }
+  };
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#6EB8E1] via-[#D6E6F2] to-[#C8ABE6]">
@@ -44,9 +45,11 @@ const getUserDetails = async () => {
       <div className="relative z-10 flex w-full max-w-5xl bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden">
         {/* Left Illustration */}
         <div className="hidden md:flex w-1/2 items-center justify-center bg-gradient-to-br from-[#C8ABE6] to-[#6EB8E1] p-8">
-          <img
+          <Image
             src="/images/profile.svg"
             alt="Profile illustration"
+            width={400}
+            height={400}
             className="w-3/4"
           />
         </div>

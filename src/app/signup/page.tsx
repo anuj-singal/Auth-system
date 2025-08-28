@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -23,11 +24,11 @@ export default function SignupPage() {
       const response = await axios.post("/api/users/signup", user);
       console.log("Signup success", response.data);
       router.push("/login");
-    }catch (error: unknown) {
-      const e = error as Error; // type assertion
+    } catch (error: unknown) {
+      const e = error as Error;
       console.log("Signup failed", e.message);
       toast.error(e.message);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -58,10 +59,12 @@ export default function SignupPage() {
       >
         {/* Left side: Illustration */}
         <div className="hidden md:block">
-          <img
+          <Image
             src="/images/signup.svg"
-            alt="signup"
-            className="h-full w-full object-cover"
+            alt="Signup Illustration"
+            width={400} // adjust as needed
+            height={400} // adjust as needed
+            className="object-cover"
           />
         </div>
 
