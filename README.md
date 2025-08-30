@@ -97,7 +97,16 @@ To deploy your own instance:
 ---
 
 ## 📜 License
-This project is licensed under the **MIT License**.  
+
+MIT License
+Copyright (c) 2025 Anuj Singal
+
+---
+
+## 👨‍💻 Author
+
+[![Anuj Singal](https://img.shields.io/badge/Anuj%20Singal-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/anuj-singal)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/anujsingal/)
 
 ---
 
