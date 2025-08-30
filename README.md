@@ -13,7 +13,7 @@ MailGuard provides a smooth flow for **sign-up, login, email verification, and p
 
 Live Project: [MailGuard on Vercel](https://mail-guard-gilt.vercel.app/)
 
-Demo:  
+Demo:
 <p align="center">
   <img src="mailguard.gif" alt="MailGuard Demo" width="700"/>
 </p>
