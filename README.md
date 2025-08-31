@@ -57,7 +57,7 @@ Demo:
    npm install
    ```
   
-3. **Setup environment variables** in `.env.local`
+3. **Setup environment variables** in `.env`
    ```bash
    MONGO_URI=your_mongo_connection
    MAILTRAP_USER=your_mailtrap_username
